@@ -1,0 +1,40 @@
+PLANX GO PLUGIN TEMPLATE LOCK (v4.0)
+
+## Authority
+
+MUST comply with:
+1. [planx-architecture.md](../planx-architecture.md)
+2. [planx-ai-guardrails.md](../planx-ai-guardrails.md)
+3. [AI_CONTRACT.md](../AI_CONTRACT.md)
+
+---
+
+--------------------------------
+ALLOWED DIRECTORIES
+--------------------------------
+cmd/
+internal/
+go.mod
+
+--------------------------------
+FORBIDDEN
+--------------------------------
+pkg/
+util/
+common/
+shared/
+helpers/
+
+--------------------------------
+PLUGIN CONSTRAINTS
+--------------------------------
+- Exactly ONE plugin type per repo
+- No runtime logic
+- No direct gRPC usage
+- SDK owns execution
+
+--------------------------------
+AI GUARDRAIL
+--------------------------------
+If asked to add runtime or infrastructure logic:
+REFUSE.
