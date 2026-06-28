@@ -6,5 +6,17 @@ import (
 )
 
 func main() {
-	sdk.ServeSink(plugin.New)
+	sdk.Serve(sdk.Plugin{
+		ID:          "sink-stdout",
+		Version:     "1.0.0",
+		DisplayName: "Stdout Sink",
+		Description: "Acceptance Test Sink (Stdout)",
+		Summary:     "Writes each batch to stdout (test/demonstration only).",
+		Components: []sdk.ComponentSpec{{
+			ID:          "sink",
+			Kind:        sdk.KindSink,
+			DisplayName: "Stdout Sink",
+			Sink:        plugin.New,
+		}},
+	})
 }

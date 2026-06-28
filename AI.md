@@ -25,12 +25,13 @@ AI MUST NOT:
 - Read from STDIN or write to STDOUT (except logging)
 
 AI MUST:
-- Implement EXACTLY ONE plugin type (Source OR Sink OR Processor)
-- Implement SPI interfaces from planx-sdk-go/sdk
+- Implement SPI interfaces from planx-sdk-go/sdk (SourceSPI / ProcessorSPI / SinkSPI)
 - Keep logic synchronous and deterministic
 - Place all business logic under `internal/plugin/`
 - Treat Batch as opaque bytes
-- Ensure `main.go` only calls one SDK function: `sdk.ServeSource`, `sdk.ServeSink`, or `sdk.ServeProcessor`
+- Ensure `main.go` only calls `sdk.Serve(sdk.Plugin{...})` — the binary is
+  self-describing (identity + components declared in code; no manifest.yaml,
+  per ADR-008).
 
 If a requirement seems to need runtime logic:
 STOP. That belongs to SDK.

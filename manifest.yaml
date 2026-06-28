@@ -1,9 +1,0 @@
-name: sink-stdout
-type: sink
-version: 1.0.0
-protocol: v4
-entry:
-  binary: sink-stdout
-resources:
-  max_sessions: 4
-description: "Acceptance Test Sink (Stdout)"
