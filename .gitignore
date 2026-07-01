@@ -1,0 +1,6 @@
+# Built plugin binary (anchored to repo root)
+/plugin
+# Plugin handshake artifact (written at startup)
+planx.handshake
+# Test binaries
+*.test
