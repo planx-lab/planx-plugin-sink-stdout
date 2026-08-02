@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/gob"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/planx-lab/planx-sdk-go/sdk"
@@ -47,8 +48,20 @@ func (s *Sink) Init(ctx context.Context, cfg []byte) error {
 }
 
 func (s *Sink) WriteBatch(batch sdk.Batch) error {
-	// Pretty-print DB rows when the upstream source is a DB connector;
-	// otherwise fall back to the generic dump.
+	// Primary path: canonical sdk.Rows ([]map[string]any) — pretty-print each
+	// row's fields as key=value. Every converted source/processor emits Rows.
+	if rows, ok := batch.(sdk.Rows); ok {
+		for _, row := range rows {
+			parts := make([]string, 0, len(row))
+			for k, v := range row {
+				parts = append(parts, fmt.Sprintf("%s=%v", k, v))
+			}
+			sort.Strings(parts)
+			fmt.Printf("[SINK] row: %s\n", strings.Join(parts, " "))
+		}
+		return nil
+	}
+	// Backward-compat fallback: DB rows from a not-yet-converted DB source.
 	if db, ok := batch.(DBBatch); ok && len(db.Columns) > 0 {
 		for _, row := range db.Rows {
 			parts := make([]string, len(db.Columns))
@@ -63,6 +76,7 @@ func (s *Sink) WriteBatch(batch sdk.Batch) error {
 		}
 		return nil
 	}
+	// Last resort: generic dump for any other type.
 	fmt.Printf("[SINK] Received Batch: %v\n", batch)
 	return nil
 }
