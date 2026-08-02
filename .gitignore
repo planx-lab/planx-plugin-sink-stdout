@@ -1,6 +1,13 @@
-# Built plugin binary (anchored to repo root)
+# Built plugin binary (the canonical name AND any plugin-id-named sibling)
 /plugin
+/sink-stdout
 # Plugin handshake artifact (written at startup)
 planx.handshake
 # Test binaries
 *.test
+# Build/runtime output
+/build/
+/dist/
+# Stray JS (this is a pure Go repo)
+node_modules/
+package-lock.json
