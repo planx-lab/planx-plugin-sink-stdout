@@ -27,7 +27,6 @@ RUN addgroup -S planx && adduser -S -G planx planx
 WORKDIR /plugin
 
 COPY --from=builder /sink-stdout /plugin/sink-stdout
-COPY planx-plugin-sink-stdout/manifest.yaml /plugin/manifest.yaml
 
 RUN chown -R planx:planx /plugin
 
