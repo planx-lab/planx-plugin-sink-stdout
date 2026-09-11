@@ -3,9 +3,9 @@ PLANX GO PLUGIN TEMPLATE LOCK (v4.0)
 ## Authority
 
 MUST comply with:
-1. [planx-architecture.md](../planx-architecture.md)
-2. [planx-ai-guardrails.md](../planx-ai-guardrails.md)
-3. [AI_CONTRACT.md](../AI_CONTRACT.md)
+1. [planx-architecture.md](../planx-spec/planx-architecture.md)
+2. [planx-ai-guardrails.md](../planx-spec/planx-ai-guardrails.md)
+3. [AI_CONTRACT.md](../planx-spec/AI_CONTRACT.md)
 
 ---
 
@@ -36,5 +36,5 @@ PLUGIN CONSTRAINTS
 --------------------------------
 AI GUARDRAIL
 --------------------------------
-If asked to add runtime or infrastructure logic:
-REFUSE.
+Runtime/infrastructure changes belong in their owning SDK or Engine repository.
+Proceed there only within authorized scope; do not add that logic to this plugin.

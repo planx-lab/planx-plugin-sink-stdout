@@ -1,37 +1,26 @@
-# AI RULES — PLANX GO PLUGIN (v4)
+# planx-plugin-sink-stdout
 
-## Authority Documents
+## Collaboration and references
 
-1. [planx-architecture.md](../planx-architecture.md)
-2. [planx-ai-guardrails.md](../planx-ai-guardrails.md)
-3. [AI_CONTRACT.md](../AI_CONTRACT.md)
-4. [planx-sdk-go/AI.md](../planx-sdk-go/AI.md) — SDK semantics
+Use [workspace guidance](../AGENTS.md) for task completion, authorization and
+proportionate checks. Read relevant clauses of the [canonical contract](../planx-spec/AI_CONTRACT.md),
+[architecture](../planx-spec/planx-architecture.md) and accepted
+[ADR-017](../planx-spec/adr/017-builtin-typed-data-integration.md) when their
+subject changes. Use [repo.lock](repo.lock) for source ownership. Do not reread
+the entire specification for an unrelated edit.
 
----
+## Plugin contract
 
-## SCOPE
-This repository implements ONLY plugin business logic.
-
----
-
-## PLUGIN HARD RULES
-
-AI MUST NOT:
-- Implement gRPC servers
-- Manage sessions or flow control
-- Start goroutines for concurrency
-- Import planx-engine
-- Import planx-proto directly
-- Read from STDIN or write to STDOUT (except logging)
-
-AI MUST:
-- Implement SPI interfaces from planx-sdk-go/sdk (SourceSPI / ProcessorSPI / SinkSPI)
-- Keep logic synchronous and deterministic
-- Place all business logic under `internal/plugin/`
-- Treat Batch as opaque bytes
-- Ensure `main.go` only calls `sdk.Serve(sdk.Plugin{...})` — the binary is
-  self-describing (identity + components declared in code; no manifest.yaml,
-  per ADR-008).
-
-If a requirement seems to need runtime logic:
-STOP. That belongs to SDK.
+- Implement business logic through `planx-sdk-go/sdk` SPI. Keep this protected external regression implementation under `internal/plugin/`.
+- One self-describing binary declares components and calls `sdk.Serve` from
+  `cmd/plugin/main.go`; no YAML manifest or runtime logic in the entry point.
+- No plugin-owned gRPC server, session, flow control, concurrency or backpressure.
+  Do not import Engine, Proto directly or SDK internals.
+- Keep business operations synchronous, deterministic and batch-oriented. Use
+  approved public typed-data/SPI APIs; transport encoding belongs to the SDK.
+- The stdout sink’s existing business output is intentional; preserve its tested formatting.
+- Runtime work belongs in its owning SDK/Engine layer. If the task authorizes
+  that cross-repository work, make the coordinated change there; otherwise pause
+  that addition and complete the plugin work already in scope.
+- Use `go test ./...` and `go build ./...` for plugin changes, and the protected
+  external regression gate when a shared protocol or SPI changes.
