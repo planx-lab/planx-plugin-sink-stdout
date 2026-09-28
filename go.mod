@@ -1,6 +1,6 @@
 module github.com/planx-lab/planx-plugin-sink-stdout
 
-go 1.25.3
+go 1.27.1
 
 require github.com/planx-lab/planx-sdk-go v0.0.0-00010101000000-000000000000
 
